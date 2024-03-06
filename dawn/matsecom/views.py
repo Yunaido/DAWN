@@ -6,9 +6,10 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView 
 from django.views.generic.edit import CreateView
 
-from .forms import SubscriberForm
+from .forms import SubscriberForm, SessionForm
 
-from .models import Subscriber
+from .models import Subscriber, Session
+
 
 # Create your views here.
 
@@ -20,7 +21,9 @@ class SubscriberListView(ListView):
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
 
-class SessionView(TemplateView):
+class SessionView(CreateView):
+    model = Session
+    form_class = SessionForm
     template_name = 'session/simulate_session.html'
 class AddSubscriberView(CreateView):
     model = Subscriber
