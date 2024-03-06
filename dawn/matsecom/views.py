@@ -6,9 +6,10 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView 
 from django.views.generic.edit import CreateView, FormView
 
-from .forms import InvoiceForm, SubscriberForm
+from .forms import SubscriberForm, SessionForm, InvoiceForm
 
-from .models import Subscriber
+from .models import Subscriber, Session, Invoice
+
 
 # Create your views here.
 
@@ -20,13 +21,18 @@ class SubscriberListView(ListView):
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
 
+class SessionView(CreateView):
+    model = Session
+    form_class = SessionForm
+    template_name = 'session/simulate_session.html'
+    
 class AddSubscriberView(CreateView):
     model = Subscriber
     form_class = SubscriberForm
     template_name = 'subscribers/add_subscriber.html'
     success_url = reverse_lazy('subscriber_list')
 
-class InvoiceView(FormView):
+class CreateInvoiceView(FormView):
     template_name = 'invoices/create_invoice.html'
     form_class = InvoiceForm
     success_url = reverse_lazy('invoice_success')

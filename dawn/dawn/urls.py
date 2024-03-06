@@ -18,13 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListView, InvoiceView
+from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListView, SessionView, CreateInvoiceView, InvoiceView
 
 
 urlpatterns = [
     path('', HomeTemplateView.as_view(), name='home'),
     path("admin/", admin.site.urls),
+    path('session/', SessionView.as_view(), name='simulate_session'),
+    path("invoice/", CreateInvoiceView.as_view(), name='create_invoice'),
     path('subscribers/', SubscriberListView.as_view(), name='subscriber_list'),
     path('subscribers/add/', AddSubscriberView.as_view(), name='add_subscriber'),
-    path('invoice/', InvoiceView.as_view(), name='invoice'),
+    path('invoice/', CreateInvoiceView.as_view(), name='invoice'),
 ]
