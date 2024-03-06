@@ -4,9 +4,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView 
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 
-from .forms import SubscriberForm
+from .forms import InvoiceForm, SubscriberForm
 
 from .models import Subscriber
 
@@ -20,12 +20,23 @@ class SubscriberListView(ListView):
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
 
-
 class AddSubscriberView(CreateView):
     model = Subscriber
     form_class = SubscriberForm
     template_name = 'subscribers/add_subscriber.html'
     success_url = reverse_lazy('subscriber_list')
+
+class InvoiceView(FormView):
+    template_name = 'invoices/create_invoice.html'
+    form_class = InvoiceForm
+    success_url = reverse_lazy('invoice_success')
+
+    def form_valid(self, form):
+        subscriber_id = form.cleaned_data['subscriber_id']
+        surname = subscriber_id.surname
+        result = invoice(surname)
+        # You can now use the result to render a template or redirect
+        return super().form_valid(form)
 
 """
 simulates a session for a subscriber
