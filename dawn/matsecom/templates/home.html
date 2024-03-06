@@ -1,16 +1,100 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}
- Homepage
+    Homepage
 {% endblock %}
 
 {% block content %}
- <div class="container">
-    <h1 class="my-3">Welcome to Our Website</h1>
-    <div class="text-center">
-        <a href="#" class="btn btn-primary mx-2 my-1">Subscriber List</a>
-        <a href="#" class="btn btn-secondary mx-2 my-1">Simulate Session</a>
-        <a href="#" class="btn btn-success mx-2 my-1">Create Invoice</a>
-    </div>
- </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage - MATSECOM</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #3ea49c; /* Stylish green background */
+            color: #495057; /* Dark gray text */
+        }
+
+        header {
+            padding: 20px;
+            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple header background */
+            color: #fff; /* White header text */
+        }
+
+        main {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff; /* White content background */
+            border-radius: 20px; /* Rounded corners for the content */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+            margin: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple footer background */
+            color: #fff; /* White footer text */
+        }
+
+        .btn-primary, .btn-secondary, .btn-success {
+            background-color: rgba(111, 66, 193, 0.8); /* Transparent purple button background */
+            border-color: rgba(111, 66, 193, 0.8); /* Transparent purple button border color */
+        }
+
+        .btn-primary:hover, .btn-secondary:hover, .btn-success:hover {
+            animation: pulse 1s infinite; /* Add pulse animation on hover */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-group {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <img src="../../static/Matsecom.png" alt="MATSECOM Logo" class="img-fluid">
+        </div>
+        <h1 class="text-center">Welcome to MATSECOM!</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1 class="my-3">Welcome to Our Website</h1>
+            <div class="text-center btn-group">
+                <a href="/subscribers" class="btn btn-primary mx-2 my-1">Subscriber List</a>
+                <a href="#" class="btn btn-secondary mx-2 my-1">Simulate Session</a>
+                <a href="#" class="btn btn-success mx-2 my-1">Create Invoice</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            &copy; 2024 MATSECOM
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
 {% endblock %}
+

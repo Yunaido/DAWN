@@ -1,26 +1,88 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #3ea49c; /* Stylish green background */
+            color: #495057; /* Dark gray text */
+        }
 
-    <meta charset="utf-8" />
+        header {
+            padding: 20px;
+            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple header background */
+            color: #fff; /* White header text */
+        }
+
+        main {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff; /* White content background */
+            border-radius: 20px; /* Rounded corners for the content */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+            margin: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple footer background */
+            color: #fff; /* White footer text */
+        }
+
+        .btn-primary {
+            background-color: rgba(111, 66, 193, 0.8); /* Transparent purple button background */
+            border-color: rgba(111, 66, 193, 0.8); /* Transparent purple button border color */
+        }
+
+        .list-group {
+            margin-top: 20px;
+        }
+
+        .list-group-item {
+            background-color: #fff; /* White list item background */
+            color: #495057; /* Dark gray text in list items */
+            border-color: rgba(111, 66, 193, 0.4); /* More transparent purple border for list items */
+        }
+
+        .alert {
+            background-color: rgba(111, 66, 193, 0.2); /* Transparent purple alert background */
+            color: #495057; /* Dark gray text in alerts */
+        }
+    </style>
     <title>
       {% block title %}
         Django Auth Tutorial
       {% endblock %}
     </title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <!-- Bootstrap JS und Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </head>
-  <body>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <img src="../../static/Matsecom.png" alt="MATSECOM Logo" class="img-fluid">
+        </div>
+        <h1 class="text-center">Welcome to MATSECOM!</h1>
+    </header>
+
     <main>
       {% block content %}
 
       {% endblock %}
     </main>
-  </body>
+
+    <footer>
+        <div class="container">
+            &copy; 2024 MATSECOM
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 </html>
