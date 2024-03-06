@@ -1,3 +1,5 @@
+import string
+
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView 
@@ -19,3 +21,18 @@ class AddSubscriberView(CreateView):
     form_class = SubscriberForm
     template_name = 'subscribers/add_subscriber.html'
     success_url = reverse_lazy('subscriber_list')
+
+"""
+simulates a session for a subscriber
+"""
+def simulateSession(surname : string, serviceType : string, duration : int):
+    pass
+
+
+"""
+generates invoice for a subscriber
+returns (surname, dataVolume, minutes, charges)
+"""
+def invoice(surname : string) -> (string, int, int, int):
+    pass
+
