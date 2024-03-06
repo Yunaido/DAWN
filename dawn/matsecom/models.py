@@ -63,7 +63,21 @@ class Subscriber(models.Model):
     imsi = models.CharField(max_length=15, unique=True)
     terminal_type = models.ForeignKey(Terminal, on_delete=models.SET_NULL, null=True)
     subscription_type = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True)
+    
+    def clean(self):
+        super().clean()
+        # Check if IMSI is 15 digits long
+        if not self.imsi.isdigit() or len(self.imsi) != 15:
+            raise ValidationError(gettext_lazy("IMSI must be exactly 15 digits long."))
+        # Extract MCC and MNC from IMSI
+        mcc = self.imsi[:3]
+        mnc = self.imsi[3:5]
+        # Check if MCC is for Germany (262) and MNC is common for Germany (01)
+        if mcc != '262' or mnc not in ['01', '02', '03', '04', '05', '06', '07', '08', '09']:
+            raise ValidationError(gettext_lazy("IMSI must be a German IMSI."))
 
+    def __str__(self) -> str:
+        return f"{self.surname} {self.forename} | {self.terminal_type.name} | {self.subscription_type}"
 
 class Service(models.Model):
     SERVICE_TYPES = [
