@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Subscriber, Session
+from .models import Subscriber, Session, Invoice
 
 
 class SubscriberForm(forms.ModelForm):
@@ -12,3 +12,8 @@ class SessionForm(forms.ModelForm):
     class Meta:
         model = Session
         fields = ['subscriber', 'service', 'duration']
+
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ['subscriber']

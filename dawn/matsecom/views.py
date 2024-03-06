@@ -6,9 +6,9 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView 
 from django.views.generic.edit import CreateView
 
-from .forms import SubscriberForm, SessionForm
+from .forms import SubscriberForm, SessionForm, InvoiceForm
 
-from .models import Subscriber, Session
+from .models import Subscriber, Session, Invoice
 
 
 # Create your views here.
@@ -20,6 +20,11 @@ class SubscriberListView(ListView):
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
+
+class CreateInvoiceView(CreateView):
+    model = Invoice
+    form_class = InvoiceForm
+    template_name = 'invoice/create_invoice.html'
 
 class SessionView(CreateView):
     model = Session

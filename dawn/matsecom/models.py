@@ -107,3 +107,15 @@ class Session(models.Model):
 
     def __str__(self) -> str:
         return f"{self.subscriber} | {self.service} | {self.timestamp}"
+
+class Invoice(models.Model):
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    duration = models.PositiveIntegerField()
+    data_volume = models.PositiveIntegerField()
+    call_minutes = models.PositiveIntegerField()
+
+    def __str__(self) -> str:
+        return f"{self.subscriber} | {self.service} | {self.timestamp}"
+
