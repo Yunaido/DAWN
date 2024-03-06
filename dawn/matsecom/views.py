@@ -32,6 +32,10 @@ class AddSubscriberView(CreateView):
     template_name = 'subscribers/add_subscriber.html'
     success_url = reverse_lazy('subscriber_list')
 
+class InvoiceView(CreateView):
+    template_name = 'invoices/get_invoice.html'
+
+
 class CreateInvoiceView(FormView):
     template_name = 'invoices/create_invoice.html'
     form_class = InvoiceForm
