@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.translation import gettext_lazy
+from django.forms import ValidationError
 
 # Create your models here.
 
@@ -17,7 +19,7 @@ class ThroughputPercentage(models.Model):
     percentage = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return f"{self.signal_quality} ({self.percentage *100}%)"
 
 class Technology(models.Model):
     TYPE_CHOICES = [
@@ -30,10 +32,15 @@ class Technology(models.Model):
     achievable_throughput_percentages = models.ManyToManyField(ThroughputPercentage)
     voice_call_support = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 class Terminal(models.Model):
     name = models.CharField(max_length=100)
     supported_technologies = models.ManyToManyField(Technology)
-    default_to_4g = models.BooleanField(default=False)
+    
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 class Subscription(models.Model):
     SUBSCRIPTION_TYPES = [
@@ -47,6 +54,9 @@ class Subscription(models.Model):
     price_per_extra_minute = models.DecimalField(max_digits=3, decimal_places=2)
     data_volume_3g_4g = models.PositiveIntegerField()
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+    
 class Subscriber(models.Model):
     forename = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
@@ -70,6 +80,8 @@ class Service(models.Model):
     ran_technologies = models.CharField(max_length=5, choices=RAN_TECHNOLOGIES)
     required_data_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"{self.name} | {self.ran_technologies} | {self.required_data_rate}"
 
 class Session(models.Model):
     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
