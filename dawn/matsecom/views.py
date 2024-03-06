@@ -86,11 +86,11 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
         throughput_percentages = _get_random_throughput_percentage_for_terminal_technologies(subscriber.terminal_type)
         fastest_throughput = throughput_percentages[0]
         for t in throughput_percentages:
-            if t[0].maximum_throughput * t[1] > fastest_throughput[0].maximum_throughput * fastest_throughput[1]:
+            if t[0].maximum_throughput * t[1].percentage > fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage:
                 fastest_throughput = t
-        if service.required_data_rate > fastest_throughput[0].maximum_throughput * fastest_throughput[1]:
+        if service.required_data_rate > fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage:
             return "not enough bandwidth"
-        data_volume = fastest_throughput[0].maximum_throughput * fastest_throughput[1] * duration
+        data_volume = fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage * duration
         if used_data_volume + data_volume > subscriber.subscription_type.data_volume_3g_4g:
             return "not enough data volume"
 
