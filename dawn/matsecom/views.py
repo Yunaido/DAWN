@@ -46,6 +46,19 @@ class CreateInvoiceView(FormView):
         # You can now use the result to render a template or redirect
         return super().form_valid(form)
 
+class SimulateSessionView(FormView):
+    template_name = 'session/simulate_session.html'
+    form_class = SessionForm
+    # success_url = reverse_lazy('invoice_success')
+
+    def form_valid(self, form):
+        subscriber = form.cleaned_data['subscriber_id']
+        service = form.cleaned_data['service_id']
+        duration = form.cleaned_data['duration']
+        result = simulate_session(subscriber, service, duration)
+        # You can now use the result to render a template or redirect
+        return super().form_valid(form)
+
 
 # simulates a session for a subscriber
 # returns a str:
@@ -53,8 +66,7 @@ class CreateInvoiceView(FormView):
 # - "calling not possible" if the subscriber's terminal does not support voice calls
 # - "not enough bandwidth" if the throughput is not sufficient for the service
 # - "not enough data volume" if the subscriber's subscription does not include enough data volume
-def simulate_session(surname: str, service: Service, duration: int) -> str:
-    subscriber = Subscriber.objects.get(surname=surname)
+def simulate_session(subscriber: Subscriber, service: Service, duration: int) -> str:
     data_volume = 0
     call_minutes = 0
 
@@ -69,7 +81,7 @@ def simulate_session(surname: str, service: Service, duration: int) -> str:
         call_minutes = _get_call_minutes_from_seconds(duration)
     else:
         sessions = Session.objects.filter(subscriber=subscriber)
-        (used_data_volume, used_call_minutes, charges) = _sum_sessions(sessions, subscriber.subscription)
+        (used_data_volume, used_call_minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
 
         throughput_percentages = _get_random_throughput_percentage_for_terminal_technologies(subscriber.terminal_type)
         fastest_throughput = throughput_percentages[0]
@@ -79,7 +91,7 @@ def simulate_session(surname: str, service: Service, duration: int) -> str:
         if service.required_data_rate > fastest_throughput[0].maximum_throughput * fastest_throughput[1]:
             return "not enough bandwidth"
         data_volume = fastest_throughput[0].maximum_throughput * fastest_throughput[1] * duration
-        if used_data_volume + data_volume > subscriber.subscription.data_volume_3g_4g:
+        if used_data_volume + data_volume > subscriber.subscription_type.data_volume_3g_4g:
             return "not enough data volume"
 
     Session.objects.create(
