@@ -8,14 +8,17 @@
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: #3ea49c; /* Stylish green background */
+            background-color: rgba(221, 160, 221, 0.1); /* Very, very, very transparent mauve background */
             color: #495057; /* Dark gray text */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        header {
+        header, footer {
             padding: 20px;
-            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple header background */
-            color: #fff; /* White header text */
+            background-color: #9CDCD4; /* White background color for both header and footer */
+            color: #000; /* Black text color for both header and footer */
         }
 
         main {
@@ -25,18 +28,12 @@
             border-radius: 20px; /* Rounded corners for the content */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
             margin: 20px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple footer background */
-            color: #fff; /* White footer text */
+            flex: 1; /* Take remaining space */
         }
 
         .btn-primary {
-            background-color: rgba(111, 66, 193, 0.8); /* Transparent purple button background */
-            border-color: rgba(111, 66, 193, 0.8); /* Transparent purple button border color */
+            background-color: rgba(147, 112, 219, 0.8); /* Light transparent purple button background */
+            border-color: rgba(147, 112, 219, 0.8); /* Light transparent purple button border color */
         }
 
         .list-group {
@@ -46,11 +43,11 @@
         .list-group-item {
             background-color: #fff; /* White list item background */
             color: #495057; /* Dark gray text in list items */
-            border-color: rgba(111, 66, 193, 0.4); /* More transparent purple border for list items */
+            border-color: rgba(147, 112, 219, 0.4); /* Light transparent purple border for list items */
         }
 
         .alert {
-            background-color: rgba(111, 66, 193, 0.2); /* Transparent purple alert background */
+            background-color: rgba(147, 112, 219, 0.2); /* Light transparent purple alert background */
             color: #495057; /* Dark gray text in alerts */
         }
     </style>
@@ -78,7 +75,7 @@
     </main>
 
     <footer>
-        <div class="container">
+        <div class="container text-center">
             &copy; 2024 MATSECOM
         </div>
     </footer>

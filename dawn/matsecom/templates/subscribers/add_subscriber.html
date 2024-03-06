@@ -6,59 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Subscriber - MATSECOM</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap">
-    <style>
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: #3ea49c; /* Stylish green background */
-            color: #495057; /* Dark gray text */
-        }
-
-        header {
-            padding: 20px;
-            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple header background */
-            color: #fff; /* White header text */
-        }
-
-        main {
-            text-align: center;
-            padding: 20px;
-            background-color: #fff; /* White content background */
-            border-radius: 20px; /* Rounded corners for the content */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-            margin: 20px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: rgba(111, 66, 193, 0.4); /* More transparent purple footer background */
-            color: #fff; /* White footer text */
-        }
-
-        img {
-            max-height: 50px; /* Set the maximum height of your logo */
-            max-width: 100%; /* Ensure the logo doesn't exceed its container */
-        }
-
-        .form-control {
-            border-radius: 12px; /* Rounded corners for text inputs */
-        }
-    </style>
-</head>
-<body>
-
-
-
-    <main>
-        <div class="container">
+   <div class="container">
             <h1 class="my-3">Add Subscriber</h1>
             <form method="post" class="form">
                 {% csrf_token %}
@@ -77,14 +25,5 @@
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
-    </main>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
 
 {% endblock %}
