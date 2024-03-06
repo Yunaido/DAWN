@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Subscribers
+ Subscribers
 {% endblock %}
 
 {% block content %}
-  <h1>Subscribers</h1>
-  <a href="{% url 'add_subscriber' %}" class="btn btn-primary">Add Subscriber</a>
-  {% if subscribers %}
-    <ul>
-      {% for subscriber in subscribers %}
-        <li>{{ subscriber.forename }} {{ subscriber.surname }} ({{ subscriber.imsi }})</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No subscribers found.</p>
-  {% endif %}
+ <div class="container">
+    <h1 class="my-3">Subscribers</h1>
+    <a href="{% url 'add_subscriber' %}" class="btn btn-primary mb-3">Add Subscriber</a>
+    {% if subscribers %}
+      <div class="list-group">
+        {% for subscriber in subscribers %}
+          <a href="#" class="list-group-item list-group-item-action">
+            {{ subscriber.forename }} {{ subscriber.surname }} ({{ subscriber.imsi }})
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info" role="alert">
+        No subscribers found.
+      </div>
+    {% endif %}
+ </div>
 {% endblock %}
+
