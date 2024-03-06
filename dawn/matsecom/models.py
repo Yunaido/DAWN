@@ -16,6 +16,9 @@ class ThroughputPercentage(models.Model):
     signal_quality = models.CharField(max_length=2, choices=SIGNAL_QUALITY_CHOICES)
     percentage = models.DecimalField(max_digits=3, decimal_places=2)
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 class Technology(models.Model):
     TYPE_CHOICES = [
         ('2G', '2G (GSM)'),
