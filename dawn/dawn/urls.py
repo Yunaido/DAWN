@@ -18,6 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from matsecom.views import AddSubscriberView, SubscriberListView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('subscribers/', SubscriberListView.as_view(), name='subscriber_list'),
+    path('subscribers/add/', AddSubscriberView.as_view(), name='add_subscriber'),
 ]

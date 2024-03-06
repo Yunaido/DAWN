@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Subscribers
+{% endblock %}
+
+{% block content %}
+  <h1>Subscribers</h1>
+  <a href="{% url 'add_subscriber' %}" class="btn btn-primary">Add Subscriber</a>
+  {% if subscribers %}
+    <ul>
+      {% for subscriber in subscribers %}
+        <li>{{ subscriber.forename }} {{ subscriber.surname }} ({{ subscriber.imsi }})</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No subscribers found.</p>
+  {% endif %}
+{% endblock %}
