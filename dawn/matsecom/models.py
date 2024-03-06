@@ -66,3 +66,12 @@ class Service(models.Model):
     name = models.CharField(max_length=50, choices=SERVICE_TYPES)
     ran_technologies = models.CharField(max_length=5, choices=RAN_TECHNOLOGIES)
     required_data_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+
+
+class Session(models.Model):
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+    duration = models.PositiveIntegerField()
+    data_volume = models.PositiveIntegerField()
+    call_minutes = models.PositiveIntegerField()
