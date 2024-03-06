@@ -24,11 +24,10 @@ from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListVi
 urlpatterns = [
     path('', HomeTemplateView.as_view(), name='home'),
     path("admin/", admin.site.urls),
-    path('session/', SessionView.as_view(), name='simulate_session'),
     path("invoice/", CreateInvoiceView.as_view(), name='create_invoice'),
     path('invoice/result/', InvoiceView.as_view(), name='get_invoice'),
     path('subscribers/', SubscriberListView.as_view(), name='subscriber_list'),
     path('subscribers/add/', AddSubscriberView.as_view(), name='add_subscriber'),
     path('invoice/', CreateInvoiceView.as_view(), name='invoice'),
-    path('simulate_session/', SimulateSessionView.as_view(), name='session_simulation'),
+    path('session/', SimulateSessionView.as_view(), name='session_simulation'),
 ]
