@@ -13,6 +13,8 @@ class InvoiceForm(forms.Form):
     
 
 class SessionForm(forms.ModelForm):
+    subscriber_id = forms.ModelChoiceField(queryset=Subscriber.objects.all(), label="Select Subscriber")
+
     class Meta:
         model = Session
-        fields = ['subscriber', 'service', 'duration']
+        fields = ['service', 'duration']
