@@ -104,6 +104,7 @@ class Session(models.Model):
     duration = models.PositiveIntegerField()
     data_volume = models.PositiveIntegerField()
     call_minutes = models.PositiveIntegerField()
+    paid = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.subscriber} | {self.service} | {self.timestamp}"

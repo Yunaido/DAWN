@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListView, SessionView, CreateInvoiceView, InvoiceView
+from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListView, SessionView, CreateInvoiceView, InvoiceView, SimulateSessionView
 
 
 urlpatterns = [
@@ -30,4 +30,5 @@ urlpatterns = [
     path('subscribers/', SubscriberListView.as_view(), name='subscriber_list'),
     path('subscribers/add/', AddSubscriberView.as_view(), name='add_subscriber'),
     path('invoice/', CreateInvoiceView.as_view(), name='invoice'),
+    path('simulate_session/', SimulateSessionView.as_view(), name='session_simulation'),
 ]

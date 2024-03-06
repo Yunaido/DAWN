@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Subscriber, Session, Invoice
+from .models import Service, Subscriber, Session, Invoice
 
 
 class SubscriberForm(forms.ModelForm):
@@ -10,11 +10,8 @@ class SubscriberForm(forms.ModelForm):
         
 class InvoiceForm(forms.Form):
     subscriber_id = forms.ModelChoiceField(queryset=Subscriber.objects.all(), label="Select Subscriber")
-    
 
-class SessionForm(forms.ModelForm):
+class SessionForm(forms.Form):
     subscriber_id = forms.ModelChoiceField(queryset=Subscriber.objects.all(), label="Select Subscriber")
-
-    class Meta:
-        model = Session
-        fields = ['service', 'duration']
+    service_id = forms.ModelChoiceField(queryset=Service.objects.all(), label="Select Service")
+    duration = forms.IntegerField(label="Select Duration")
