@@ -20,7 +20,8 @@ class SubscriberListView(ListView):
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
 
-
+class SessionView(TemplateView):
+    template_name = 'session/simulate_session.html'
 class AddSubscriberView(CreateView):
     model = Subscriber
     form_class = SubscriberForm
