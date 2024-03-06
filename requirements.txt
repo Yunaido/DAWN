@@ -1,0 +1,2 @@
+gunicorn == 21.0.*
+Django == 5.0.*
