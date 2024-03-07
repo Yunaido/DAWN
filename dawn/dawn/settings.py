@@ -23,6 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-!phh3n1gd^k$w+wy@+1)8elp3f&r_cwh4t9=is1nl-$l$g$y!6"
 
+# Encryption key for database
+FIELD_ENCRYPTION_KEY = "eqZklcJ7rvGDJ813zaSUr3KqbnRVxu6xTE6l3A72WIM="  # this is for demo only, in real project you would do: os.environ.get('DAWN_DATABASE_ENCRYPTION_KEY', '')
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -39,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'widget_tweaks',
+    'encrypted_model_fields',
     "matsecom"
 
 ]

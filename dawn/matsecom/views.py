@@ -93,7 +93,7 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
             return "calling not possible"
         call_minutes = _get_call_minutes_from_seconds(duration)
     else:
-        sessions = Session.objects.filter(subscriber=subscriber)
+        sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber)
         (used_data_volume, used_call_minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
 
         throughput_percentages = _get_random_throughput_percentage_for_terminal_technologies(subscriber.terminal_type)
@@ -122,8 +122,8 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
 # generates invoice for a subscriber
 # returns (surname, dataVolume, minutes, charges)
 def invoice(surname: str) -> (str, int, int, int):
-    subscriber = Subscriber.objects.get(surname=surname)
-    sessions = Session.objects.filter(subscriber=subscriber, paid=False)
+    subscriber = _my_database_filter(Subscriber.objects.all(), lambda x: x.surname == surname)[0]
+    sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber and not x.paid)
     for session in sessions:
         session.paid = True
         session.save()
@@ -161,3 +161,12 @@ def _get_random_throughput_percentage_for_terminal_technologies(terminal):
 # rounds up to the next minute
 def _get_call_minutes_from_seconds(sec: int) -> int:
     return (sec // 60) + 1
+
+
+# because of encryption, the .filter function used by django doesnt work properly, so we use this function instead
+# this is not very performant, but the easiest solution for now. A better solution would be to use something like
+# https://github.com/dcwatson/django-pgcrypto , which handles the encryption in the database itself and not in the
+# django code and thus keeps SQL filters working
+def _my_database_filter(database_list, evaluation_function):
+    return [x for x in database_list if evaluation_function(x)]
+

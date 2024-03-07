@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy
 from django.forms import ValidationError
+from encrypted_model_fields.fields import EncryptedCharField
 
 # Create your models here.
 
@@ -58,9 +59,9 @@ class Subscription(models.Model):
         return f"{self.name}"
     
 class Subscriber(models.Model):
-    forename = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    imsi = models.CharField(max_length=15, unique=True)
+    forename = EncryptedCharField(max_length=100)
+    surname = EncryptedCharField(max_length=100)
+    imsi = EncryptedCharField(max_length=100, unique=True)
     terminal_type = models.ForeignKey(Terminal, on_delete=models.SET_NULL, null=True)
     subscription_type = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True)
     
