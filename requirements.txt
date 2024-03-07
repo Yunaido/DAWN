@@ -2,3 +2,4 @@ gunicorn == 21.0.*
 Django == 5.0.*
 django-widget-tweaks
 django-encrypted-model-fields
+django-mathfilters

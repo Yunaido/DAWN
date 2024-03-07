@@ -1,4 +1,5 @@
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, FormView, DetailView, DeleteView
 from django.views.generic.edit import CreateView
@@ -48,21 +49,21 @@ class SessionView(CreateView):
     form_class = SessionForm
     template_name = 'session/simulate_session.html'
 
-class InvoiceView(CreateView):
-    template_name = 'invoices/get_invoice.html'
-
-
 class CreateInvoiceView(FormView):
     template_name = 'invoices/create_invoice.html'
     form_class = InvoiceForm
-    success_url = reverse_lazy('invoice_success')
+    success_url = reverse_lazy('invoice_details')
 
     def form_valid(self, form):
-        subscriber_id = form.cleaned_data['subscriber_id']
-        surname = subscriber_id.surname
-        result = invoice(surname)
-        # You can now use the result to render a template or redirect
-        return super().form_valid(form)
+        subscriber = form.cleaned_data['subscriber_id']
+        generated_invoice = invoice(subscriber) # Rufen Sie die invoice-Funktion auf
+        # Speichern Sie die Ergebnisse in der Sitzung, um sie im nächsten Schritt zu verwenden
+        return HttpResponseRedirect(reverse('invoice_details', args=[generated_invoice.id]))
+
+class InvoiceDetailView(DetailView):
+    model = Invoice
+    template_name = 'invoices/invoice_detail.html' # Specify the template name
+    context_object_name = 'invoice'
 
 class SimulateSessionView(FormView):
     template_name = 'session/simulate_session.html'
@@ -76,7 +77,6 @@ class SimulateSessionView(FormView):
         result = simulate_session(subscriber, service, duration)
         # You can now use the result to render a template or redirect
         return super().form_valid(form)
-
 
 # simulates a session for a subscriber
 # returns a str:
@@ -123,18 +123,22 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
     )
     return ""
 
-
 # generates invoice for a subscriber
 # returns (surname, dataVolume, minutes, charges)
-def invoice(surname: str) -> (str, int, int, int):
-    subscriber = _my_database_filter(Subscriber.objects.all(), lambda x: x.surname == surname)[0]
+def invoice(subscriber: Subscriber) -> Invoice:
     sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber and not x.paid)
     for session in sessions:
         session.paid = True
         session.save()
-    (data_volume, minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
-    return subscriber.surname, data_volume, minutes, charges
-
+        
+    (data_volume, call_minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
+    return Invoice.objects.create(
+        subscriber=subscriber,
+        timestamp=timezone.now,
+        data_volume = data_volume,
+        call_minutes = call_minutes,
+        charges = charges
+    )
 
 # returns (dataVolume, minutes, charges)
 # does not check if used data exceeds the included data volume

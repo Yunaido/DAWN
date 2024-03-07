@@ -102,7 +102,7 @@ class Service(models.Model):
         return f"{self.name} | {self.ran_technologies} | {self.required_data_rate}"
 
 class Session(models.Model):
-    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, related_name='sessions')
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     duration = models.PositiveIntegerField()
@@ -115,12 +115,10 @@ class Session(models.Model):
 
 class Invoice(models.Model):
     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    duration = models.PositiveIntegerField()
     data_volume = models.PositiveIntegerField()
     call_minutes = models.PositiveIntegerField()
+    charges = models.PositiveIntegerField()
 
     def __str__(self) -> str:
-        return f"{self.subscriber} | {self.service} | {self.timestamp}"
-
+        return f"{self.subscriber} | {self.timestamp}"

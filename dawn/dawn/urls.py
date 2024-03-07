@@ -19,20 +19,18 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from matsecom.views import HomeTemplateView, SubscriberListView, SubscriberDetailView, AddSubscriberView, SubscriberDeleteView, SessionView, CreateInvoiceView, InvoiceView, SimulateSessionView
-
+from matsecom.views import HomeTemplateView, SubscriberListView, SubscriberDetailView, AddSubscriberView, SubscriberDeleteView, CreateInvoiceView, InvoiceDetailView, SimulateSessionView
 
 urlpatterns = [
     path('', HomeTemplateView.as_view(), name='home'),
     path('login/', LoginView.as_view(next_page='/'), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path("admin/", admin.site.urls),
-    path("invoice/", CreateInvoiceView.as_view(), name='create_invoice'),
-    path('invoice/result/', InvoiceView.as_view(), name='get_invoice'),
     path('subscribers/', SubscriberListView.as_view(), name='subscriber_list'),
     path('subscribers/<int:pk>/', SubscriberDetailView.as_view(), name='subscriber_detail'),
     path('subscribers/add/', AddSubscriberView.as_view(), name='add_subscriber'),
     path('subscribers/delete/<int:pk>/', SubscriberDeleteView.as_view(), name='subscriber_delete'),
     path('invoice/', CreateInvoiceView.as_view(), name='invoice'),
+    path('invoice/<int:pk>/', InvoiceDetailView.as_view(), name='invoice_details'),
     path('session/', SimulateSessionView.as_view(), name='session_simulation'),
 ]

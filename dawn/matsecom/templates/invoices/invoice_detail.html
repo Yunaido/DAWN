@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load mathfilters %}
+
+{% block title %}
+  Invoice Display
+{% endblock %}
+
+{% block content %}
+  <h1>Invoice Details</h1>
+  <p>Subscriber: {{ invoice.subscriber.surname }} {{ invoice.subscriber.forename }}</p>
+  <p>Timestamp: {{ invoice.timestamp }}</p>
+  <p>Data Volume: {{ invoice.data_volume }} MB</p>
+  <p>Call Minutes: {{ invoice.call_minutes }} min</p>
+  <p>Charges: {{ invoice.charges|div:100|floatformat:2 }} €</p>
+{% endblock %}

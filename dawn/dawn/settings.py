@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'widget_tweaks',
+    'mathfilters',
     'encrypted_model_fields',
     "matsecom"
 
