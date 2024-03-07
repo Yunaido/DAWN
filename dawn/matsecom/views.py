@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, DetailView, DeleteView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
@@ -11,24 +11,37 @@ from .models import Subscriber, Session, Invoice, Service, Subscription
 
 # Create your views here.
 
+class HomeTemplateView(TemplateView):
+    template_name = 'home.html'
+
 class SubscriberListView(ListView):
     model = Subscriber
     template_name = 'subscribers/subscriber_list.html' # Specify your template location
     context_object_name = 'subscribers' # Name for the list as a template variable
 
-class HomeTemplateView(TemplateView):
-    template_name = 'home.html'
+class SubscriberDetailView(DetailView):
+    model = Subscriber
+    template_name = 'subscribers/subscriber_detail.html' # Pfad zur Template-Datei
 
-class SessionView(CreateView):
-    model = Session
-    form_class = SessionForm
-    template_name = 'session/simulate_session.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Hier können Sie zusätzliche Kontextdaten hinzufügen, falls erforderlich
+        return context
+    
+class SubscriberDeleteView(DeleteView):
+    model = Subscriber
+    success_url = reverse_lazy('subscriber_list')
 
 class AddSubscriberView(CreateView):
     model = Subscriber
     form_class = SubscriberForm
     template_name = 'subscribers/add_subscriber.html'
     success_url = reverse_lazy('subscriber_list')
+
+class SessionView(CreateView):
+    model = Session
+    form_class = SessionForm
+    template_name = 'session/simulate_session.html'
 
 class InvoiceView(CreateView):
     template_name = 'invoices/get_invoice.html'

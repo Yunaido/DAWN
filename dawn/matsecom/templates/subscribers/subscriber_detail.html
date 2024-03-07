@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Detail Subscriber
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ object.forename }} {{ object.surname }}</h1>
+    <p><strong>IMSI:</strong> {{ object.imsi }}</p>
+    <p><strong>Terminal Type:</strong> {{ object.terminal_type }}</p>
+    <p><strong>Subscription Type:</strong> {{ object.subscription_type }}</p>
+    <form action="{% url 'subscriber_delete' object.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Subscriber</button>
+    </form>
+</div>
+{% endblock %}

@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListView, SessionView, CreateInvoiceView, InvoiceView, SimulateSessionView
+from matsecom.views import HomeTemplateView, SubscriberListView, SubscriberDetailView, AddSubscriberView, SubscriberDeleteView, SessionView, CreateInvoiceView, InvoiceView, SimulateSessionView
 
 
 urlpatterns = [
@@ -30,7 +30,9 @@ urlpatterns = [
     path("invoice/", CreateInvoiceView.as_view(), name='create_invoice'),
     path('invoice/result/', InvoiceView.as_view(), name='get_invoice'),
     path('subscribers/', SubscriberListView.as_view(), name='subscriber_list'),
+    path('subscribers/<int:pk>/', SubscriberDetailView.as_view(), name='subscriber_detail'),
     path('subscribers/add/', AddSubscriberView.as_view(), name='add_subscriber'),
+    path('subscribers/delete/<int:pk>/', SubscriberDeleteView.as_view(), name='subscriber_delete'),
     path('invoice/', CreateInvoiceView.as_view(), name='invoice'),
     path('session/', SimulateSessionView.as_view(), name='session_simulation'),
 ]
