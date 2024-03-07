@@ -1,3 +1,6 @@
+import csv
+import io
+
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, FormView, DetailView, DeleteView
@@ -135,6 +138,15 @@ def invoice(surname: str) -> (str, int, int, int):
     (data_volume, minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
     return subscriber.surname, data_volume, minutes, charges
 
+
+def get_all_subscribers_as_csv():
+    subscribers = Subscriber.objects.all()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['forename', 'surname', 'imsi', 'terminal_type', 'subscription_type'])
+    for subscriber in subscribers:
+        writer.writerow([subscriber.forename, subscriber.surname, subscriber.imsi, subscriber.terminal_type.name, subscriber.subscription_type.name])
+    return output.getvalue()
 
 # returns (dataVolume, minutes, charges)
 # does not check if used data exceeds the included data volume
