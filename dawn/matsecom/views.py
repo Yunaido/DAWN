@@ -8,8 +8,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
 from .forms import SubscriberForm, SessionForm, InvoiceForm
-
-from .models import Subscriber, Session, Invoice, Service, Subscription
+from .models import Subscriber, Session, Service, Subscription, Terminal
 
 
 # Create your views here.
@@ -145,8 +144,33 @@ def get_all_subscribers_as_csv():
     writer = csv.writer(output)
     writer.writerow(['forename', 'surname', 'imsi', 'terminal_type', 'subscription_type'])
     for subscriber in subscribers:
-        writer.writerow([subscriber.forename, subscriber.surname, subscriber.imsi, subscriber.terminal_type.name, subscriber.subscription_type.name])
+        writer.writerow([subscriber.forename, subscriber.surname, subscriber.imsi, subscriber.terminal_type.name,
+                         subscriber.subscription_type.name])
     return output.getvalue()
+
+
+# returns "" if all subscribers were created
+# returns error message otherwise
+def load_from_csv(csv_str: str) -> str:
+    data = io.StringIO(csv_str)
+    reader = csv.reader(data)
+    for row in reader:
+        if _my_database_filter(Subscriber.objects.all(), lambda x: x.imsi == row[2]):
+            # subscriber already exists
+            continue
+        if not Terminal.objects.get(name=row[3]):
+            return "terminal " + row[3] + " of user " + row[0] + " " + row[1] + " does not exist"
+        if not Subscription.objects.get(name=row[4]):
+            return "subscription " + row[4] + " of user " + row[0] + " " + row[1] + " does not exist"
+        Subscriber.objects.create(
+            forename=row[0],
+            surname=row[1],
+            imsi=row[2],
+            terminal_type=Terminal.objects.get(name=row[3]),
+            subscription_type=Subscription.objects.get(name=row[4])
+        )
+    return ""
+
 
 # returns (dataVolume, minutes, charges)
 # does not check if used data exceeds the included data volume
@@ -187,4 +211,3 @@ def _get_call_minutes_from_seconds(sec: int) -> int:
 # django code and thus keeps SQL filters working
 def _my_database_filter(database_list, evaluation_function):
     return [x for x in database_list if evaluation_function(x)]
-
