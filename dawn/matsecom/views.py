@@ -87,18 +87,25 @@ class SimulateSessionView(FormView):
             form.add_error(None, result) # Add a non-field error
             return self.form_invalid(form) # Redirect to the form with errors
         return super().form_valid(form)
-    
+
     def form_invalid(self, form):
         # You can add custom logic here if needed, or just pass the form with errors to the template
         return self.render_to_response(self.get_context_data(form=form))
 
+
+def simulate_session(subscriber: Subscriber, service: Service, duration: int):
+    return _simulate_session(subscriber, service, duration, lambda x: _get_random_throughput_percentage_for_terminal_technologies(x))
+
+
 # simulates a session for a subscriber
+# throughput chooser should be a function Terminal -> list of tuples (Technology, ThroughputPercentage)
+# default is the random throughput chooser, for testing other throughput choosers can be injected
 # returns a str:
 # - "" if session simulation was successful
 # - "calling not possible" if the subscriber's terminal does not support voice calls
 # - "not enough bandwidth" if the throughput is not sufficient for the service
 # - "not enough data volume" if the subscriber's subscription does not include enough data volume
-def simulate_session(subscriber: Subscriber, service: Service, duration: int) -> str:
+def _simulate_session(subscriber: Subscriber, service: Service, duration: int, throughput_chooser) -> str:
     data_volume = 0
     call_seconds = 0
 
@@ -137,6 +144,7 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
     )
     return ""
 
+
 # generates invoice for a subscriber
 # returns (surname, dataVolume, minutes, charges)
 def invoice(subscriber: Subscriber) -> Invoice:
@@ -144,15 +152,16 @@ def invoice(subscriber: Subscriber) -> Invoice:
     for session in sessions:
         session.paid = True
         session.save()
-        
+
     (data_volume, call_minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
     return Invoice.objects.create(
         subscriber=subscriber,
         timestamp=timezone.now,
-        data_volume = data_volume,
-        call_minutes = call_minutes,
-        charges = charges
+        data_volume=data_volume,
+        call_minutes=call_minutes,
+        charges=charges
     )
+
 
 def get_all_subscribers_as_csv():
     subscribers = Subscriber.objects.all()
