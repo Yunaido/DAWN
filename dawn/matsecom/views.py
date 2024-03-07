@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
 from .forms import SubscriberForm, SessionForm, InvoiceForm
-from .models import Subscriber, Session, Service, Subscription, Terminal
+from .models import Invoice, Subscriber, Session, Service, Subscription, Terminal
 
 
 # Create your views here.
