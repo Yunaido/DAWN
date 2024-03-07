@@ -114,7 +114,7 @@ def invoice(surname: str) -> (str, int, int, int):
     for session in sessions:
         session.paid = True
         session.save()
-    (data_volume, minutes, charges) = _sum_sessions(sessions, subscriber.subscription)
+    (data_volume, minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
     return subscriber.surname, data_volume, minutes, charges
 
 
@@ -137,6 +137,8 @@ def _sum_sessions(sessions: list, subscription: Subscription) -> (int, int, int)
 def _get_random_throughput_percentage_for_terminal_technologies(terminal):
     throughput_percentages = []
     for technology in terminal.supported_technologies.all():
+        if technology.maximum_throughput is None or technology.achievable_throughput_percentages.count() == 0:
+            continue
         throughput_percentages.append(
             (technology, technology.achievable_throughput_percentages.all().order_by('?').first()))
     return throughput_percentages
