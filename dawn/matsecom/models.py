@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy
 from django.forms import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from encrypted_model_fields.fields import EncryptedCharField
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedPositiveIntegerField
 
 # Create your models here.
 
@@ -63,7 +63,7 @@ class Subscription(models.Model):
 class Subscriber(models.Model):
     forename = EncryptedCharField(max_length=100, null=False)
     surname = EncryptedCharField(max_length=100, null=False)
-    imsi = EncryptedCharField(max_length=100, unique=True, null=False)
+    imsi = EncryptedPositiveIntegerField(unique=True, null=False)
     terminal_type = models.ForeignKey(Terminal, on_delete=models.PROTECT)
     subscription_type = models.ForeignKey(Subscription, on_delete=models.PROTECT)
     
@@ -74,14 +74,17 @@ class Subscriber(models.Model):
         self.validate_name(self.forename, 'forename')
         self.validate_name(self.surname, 'surname')
         
-        # Check if IMSI is 15 digits long
-        imsi = self.imsi
-        if not imsi.isdigit() or len(imsi) != 15:
+        # Check if IMSI is 15 digits long and in germany
+        self.validate_imsi(self.imsi)
+
+    def validate_imsi(self, imsi):
+        imsi_str = str(self.imsi)
+        if not imsi_str.isdigit() or len(imsi_str) != 15:
             raise ValidationError({
                 'imsi': gettext_lazy("IMSI must be exactly 15 digits long.")
             })
-        mcc = imsi[:3]
-        mnc = imsi[3:5]
+        mcc = imsi_str[:3]
+        mnc = imsi_str[3:5]
         if mcc != '262' or mnc not in ['01', '02', '03', '04', '05', '06', '07', '08', '09']:
             raise ValidationError({
                 'imsi': gettext_lazy("IMSI must be a German IMSI.")
