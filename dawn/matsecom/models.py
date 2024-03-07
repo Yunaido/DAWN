@@ -50,9 +50,9 @@ class Subscription(models.Model):
         ('GL', 'GreenMobil L'),
     ]
     name = models.CharField(max_length=50, choices=SUBSCRIPTION_TYPES)
-    basic_fee = models.DecimalField(max_digits=5, decimal_places=2)
+    basic_fee = models.PositiveIntegerField(null=False, blank=False)
     minutes_included = models.PositiveIntegerField()
-    price_per_extra_minute = models.DecimalField(max_digits=3, decimal_places=2)
+    price_per_extra_minute = models.PositiveIntegerField(null=False, blank=False)
     data_volume_3g_4g = models.PositiveIntegerField()
 
     def __str__(self) -> str:
