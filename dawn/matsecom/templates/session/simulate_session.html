@@ -2,13 +2,36 @@
 {% load widget_tweaks %}
 
 {% block title %}
-    Simulate Session
+  Simulate Session
 {% endblock %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-</form>
+  <div class="container">
+    <h1 class="my-3">Add Subscriber</h1>
+    <form method="post" class="form">
+      {% csrf_token %}
+      {% comment %} {{ form.as_p }} {% endcomment %}
+      <div class="form-group">{{ form.subscriber.label_tag }}
+        {{ form.subscriber|add_class:'form-control' }}</div>
+      <div class="form-group">{{ form.service.label_tag }}
+        {{ form.service|add_class:'form-control' }}</div>
+      <div class="form-group">{{ form.duration.label_tag }}
+        {{ form.duration|add_class:'form-control' }}</div>
+      {% if form.errors %}
+        <div class="alert alert-danger mt-3" role="alert">
+          <ul>
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 {% endblock %}

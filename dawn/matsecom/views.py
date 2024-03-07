@@ -67,18 +67,25 @@ class InvoiceDetailView(DetailView):
     template_name = 'invoices/invoice_detail.html' # Specify the template name
     context_object_name = 'invoice'
 
-class SimulateSessionView(FormView):
-    template_name = 'session/simulate_session.html'
+class SimulateSessionView(CreateView):
+    model = Session
     form_class = SessionForm
-    # success_url = reverse_lazy('invoice_success')
+    template_name = 'session/simulate_session.html'
+    # success_url = reverse_lazy('simulate_session_success')
 
     def form_valid(self, form):
-        subscriber = form.cleaned_data['subscriber_id']
-        service = form.cleaned_data['service_id']
+        subscriber = form.cleaned_data['subscriber']
+        service = form.cleaned_data['service']
         duration = form.cleaned_data['duration']
         result = simulate_session(subscriber, service, duration)
-        # You can now use the result to render a template or redirect
+        if result != "":
+            form.add_error(None, result) # Add a non-field error
+            return self.form_invalid(form) # Redirect to the form with errors
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        # You can add custom logic here if needed, or just pass the form with errors to the template
+        return self.render_to_response(self.get_context_data(form=form))
 
 # simulates a session for a subscriber
 # returns a str:
