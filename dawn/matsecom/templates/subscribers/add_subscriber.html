@@ -6,19 +6,6 @@
 {% endblock %}
 
 {% block content %}
-  {% comment %} <div class="container">
-    <h1 class="my-3">Add Subscriber</h1>
-    <form method="post" class="form">
-      {% csrf_token %}
-      <div class="form-group">{{ form.forename.label_tag }}
-        {{ form.forename|add_class:'form-control' }}</div>
-      <div class="form-group">{{ form.surname.label_tag }}
-        {{ form.surname|add_class:'form-control' }}</div>
-      <div class="form-group">{{ form.imsi.label_tag }}
-        {{ form.imsi|add_class:'form-control' }}</div>
-      <button type="submit" class="btn btn-primary">Save</button>
-    </form>
-  </div> {% endcomment %}
   <div class="container">
     <h1 class="my-3">Add Subscriber</h1>
     <form method="post" class="form">
