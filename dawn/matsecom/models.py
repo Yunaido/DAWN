@@ -67,14 +67,17 @@ class Subscriber(models.Model):
     def clean(self):
         super().clean()
         # Check if IMSI is 15 digits long
-        if not self.imsi.isdigit() or len(self.imsi) != 15:
-            raise ValidationError(gettext_lazy("IMSI must be exactly 15 digits long."))
-        # Extract MCC and MNC from IMSI
-        mcc = self.imsi[:3]
-        mnc = self.imsi[3:5]
-        # Check if MCC is for Germany (262) and MNC is common for Germany (01)
+        imsi = self.imsi
+        if not imsi.isdigit() or len(imsi) != 15:
+            raise ValidationError({
+                'imsi': gettext_lazy("IMSI must be exactly 15 digits long.")
+            })
+        mcc = imsi[:3]
+        mnc = imsi[3:5]
         if mcc != '262' or mnc not in ['01', '02', '03', '04', '05', '06', '07', '08', '09']:
-            raise ValidationError(gettext_lazy("IMSI must be a German IMSI."))
+            raise ValidationError({
+                'imsi': gettext_lazy("IMSI must be a German IMSI.")
+            })
 
     def __str__(self) -> str:
         return f"{self.surname} {self.forename} | {self.terminal_type.name} | {self.subscription_type}"
