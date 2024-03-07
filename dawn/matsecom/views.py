@@ -38,6 +38,11 @@ class AddSubscriberView(CreateView):
     template_name = 'subscribers/add_subscriber.html'
     success_url = reverse_lazy('subscriber_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Hier können Sie zusätzliche Logik hinzufügen, falls erforderlich
+        return response
+
 class SessionView(CreateView):
     model = Session
     form_class = SessionForm
