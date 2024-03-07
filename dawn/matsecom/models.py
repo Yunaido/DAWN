@@ -107,7 +107,7 @@ class Session(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     duration = models.PositiveIntegerField()
     data_volume = models.PositiveIntegerField()
-    call_minutes = models.PositiveIntegerField()
+    call_seconds = models.PositiveIntegerField()
     paid = models.BooleanField(default=False)
 
     def __str__(self) -> str:

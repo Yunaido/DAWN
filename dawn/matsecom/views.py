@@ -86,7 +86,7 @@ class SimulateSessionView(FormView):
 # - "not enough data volume" if the subscriber's subscription does not include enough data volume
 def simulate_session(subscriber: Subscriber, service: Service, duration: int) -> str:
     data_volume = 0
-    call_minutes = 0
+    call_seconds = 0
 
     if service.name == 'VC':
         calling_possible = False
@@ -96,10 +96,10 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
                 break
         if not calling_possible:
             return "calling not possible"
-        call_minutes = _get_call_minutes_from_seconds(duration)
+        call_seconds = duration
     else:
         sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber)
-        (used_data_volume, used_call_minutes, charges) = _sum_sessions(sessions, subscriber.subscription_type)
+        (used_data_volume, used_call_seconds, charges) = _sum_sessions(sessions, subscriber.subscription_type)
 
         throughput_percentages = _get_random_throughput_percentage_for_terminal_technologies(subscriber.terminal_type)
         fastest_throughput = throughput_percentages[0]
@@ -118,7 +118,7 @@ def simulate_session(subscriber: Subscriber, service: Service, duration: int) ->
         timestamp=timezone.now(),
         duration=duration,
         data_volume=data_volume,
-        call_minutes=call_minutes,
+        call_seconds=call_seconds,
         paid=False
     )
     return ""
@@ -140,14 +140,15 @@ def invoice(surname: str) -> (str, int, int, int):
 # does not check if used data exceeds the included data volume
 def _sum_sessions(sessions: list, subscription: Subscription) -> (int, int, int):
     data_volume = 0
-    minutes = 0
+    call_seconds = 0
     for session in sessions:
         data_volume += session.data_volume
-        minutes += session.call_minutes
+        call_seconds += session.call_seconds
     charges = subscription.basic_fee
-    if minutes > subscription.minutes_included:
-        charges += (minutes - subscription.minutes_included) * subscription.price_per_extra_minute
-    return data_volume, minutes, charges
+    call_minutes = _get_call_minutes_from_seconds(call_seconds)
+    if call_minutes > subscription.minutes_included:
+        charges += (call_minutes - subscription.minutes_included) * subscription.price_per_extra_minute
+    return data_volume, call_seconds, charges
 
 
 # returns a list of tuples (technology, throughput_percentage), choosing a random throughput percentage for each
