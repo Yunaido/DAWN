@@ -59,14 +59,19 @@ class Subscription(models.Model):
         return f"{self.name}"
     
 class Subscriber(models.Model):
-    forename = EncryptedCharField(max_length=100)
-    surname = EncryptedCharField(max_length=100)
-    imsi = EncryptedCharField(max_length=100, unique=True)
-    terminal_type = models.ForeignKey(Terminal, on_delete=models.SET_NULL, null=True)
-    subscription_type = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True)
+    forename = EncryptedCharField(max_length=100, null=False)
+    surname = EncryptedCharField(max_length=100, null=False)
+    imsi = EncryptedCharField(max_length=100, unique=True, null=False)
+    terminal_type = models.ForeignKey(Terminal, on_delete=models.PROTECT)
+    subscription_type = models.ForeignKey(Subscription, on_delete=models.PROTECT)
     
     def clean(self):
         super().clean()
+        
+        # Validate names
+        self.validate_name(self.forename, 'forename')
+        self.validate_name(self.surname, 'surname')
+        
         # Check if IMSI is 15 digits long
         imsi = self.imsi
         if not imsi.isdigit() or len(imsi) != 15:
@@ -78,6 +83,13 @@ class Subscriber(models.Model):
         if mcc != '262' or mnc not in ['01', '02', '03', '04', '05', '06', '07', '08', '09']:
             raise ValidationError({
                 'imsi': gettext_lazy("IMSI must be a German IMSI.")
+            })
+
+    def validate_name(self, name, field_name):
+        # Ensure the name only contains valid characters
+        if not name.isalpha():
+            raise ValidationError({
+                field_name: gettext_lazy("Names must only contain alphabetic characters.")
             })
 
     def __str__(self) -> str:
