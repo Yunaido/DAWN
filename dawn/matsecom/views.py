@@ -67,11 +67,16 @@ class InvoiceDetailView(DetailView):
     template_name = 'invoices/invoice_detail.html' # Specify the template name
     context_object_name = 'invoice'
 
-class SimulateSessionView(CreateView):
+class SessionListView(ListView):
+    model = Session
+    template_name = 'session/session_list.html' # Specify your template location
+    context_object_name = 'sessions' # Name for the list as a template variable
+
+class SimulateSessionView(FormView):
     model = Session
     form_class = SessionForm
     template_name = 'session/simulate_session.html'
-    # success_url = reverse_lazy('simulate_session_success')
+    success_url = reverse_lazy('session_list')
 
     def form_valid(self, form):
         subscriber = form.cleaned_data['subscriber']
