@@ -16,6 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListView, SessionView, CreateInvoiceView, InvoiceView, SimulateSessionView
@@ -23,6 +24,8 @@ from matsecom.views import HomeTemplateView, AddSubscriberView, SubscriberListVi
 
 urlpatterns = [
     path('', HomeTemplateView.as_view(), name='home'),
+    path('login/', LoginView.as_view(next_page='/'), name='login'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path("admin/", admin.site.urls),
     path("invoice/", CreateInvoiceView.as_view(), name='create_invoice'),
     path('invoice/result/', InvoiceView.as_view(), name='get_invoice'),
