@@ -122,10 +122,11 @@ def _simulate_session(subscriber: Subscriber, service: Service, duration: int, t
         sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber)
         (used_data_volume, used_call_seconds, charges) = _sum_sessions(sessions, subscriber.subscription_type)
 
-        throughput_percentages = _get_random_throughput_percentage_for_terminal_technologies(subscriber.terminal_type)
+        throughput_percentages = throughput_chooser(subscriber.terminal_type)
         fastest_throughput = throughput_percentages[0]
         for t in throughput_percentages:
-            if t[0].maximum_throughput * t[1].percentage > fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage:
+            if t[0].maximum_throughput * t[1].percentage > fastest_throughput[0].maximum_throughput * \
+                    fastest_throughput[1].percentage:
                 fastest_throughput = t
         if service.required_data_rate > fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage:
             return "not enough bandwidth"
