@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy
 from django.forms import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 from encrypted_model_fields.fields import EncryptedCharField
 
 # Create your models here.
@@ -115,9 +117,12 @@ class Service(models.Model):
 
 class Session(models.Model):
     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, related_name='sessions')
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
-    duration = models.PositiveIntegerField()
+    duration = models.PositiveIntegerField(validators=[
+            MaxValueValidator(2500000),
+            MinValueValidator(1)
+        ])
     data_volume = models.PositiveIntegerField()
     call_seconds = models.PositiveIntegerField()
     paid = models.BooleanField(default=False)
