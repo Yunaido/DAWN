@@ -1,14 +1,16 @@
 import csv
 import io
 
-from django.http import HttpResponseRedirect
+from django.core.files.storage import default_storage
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import TemplateView, FormView, DetailView, DeleteView
+from django.contrib import messages
+from django.views.generic import View, TemplateView, FormView, DetailView, DeleteView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
-from .forms import SubscriberForm, SessionForm, InvoiceForm
+from .forms import SubscriberForm, SessionForm, InvoiceForm, UploadCSVForm
 from .models import Invoice, Subscriber, Session, Service, Subscription, Terminal
 
 
@@ -21,6 +23,36 @@ class SubscriberListView(ListView):
     model = Subscriber
     template_name = 'subscribers/subscriber_list.html' # Specify your template location
     context_object_name = 'subscribers' # Name for the list as a template variable
+    
+    def get(self, request, *args, **kwargs):
+        action = request.GET.get('action')
+        if action == 'download':
+            return self.get_csv(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        if 'csv_file' in request.FILES:
+            csv_file = request.FILES['csv_file']
+            # Save the file temporarily
+            temp_file_path = default_storage.save(csv_file.name, csv_file)
+            # Read the file content
+            with default_storage.open(temp_file_path, 'r') as f:
+                csv_content = f.read()
+            # Import subscribers from the CSV content
+            load_from_csv(csv_content)
+            # Clean up the temporary file
+            default_storage.delete(temp_file_path)
+            return JsonResponse({'status': 'success', 'message': 'Subscribers imported successfully'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'No file uploaded'})
+        
+    def get_csv(self, request, *args, **kwargs):
+        # Generate CSV content
+        csv_content = get_all_subscribers_as_csv()
+        # Create a response with the CSV content
+        response = HttpResponse(csv_content, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="subscribers.csv"'
+        return response
 
 class SubscriberDetailView(DetailView):
     model = Subscriber
@@ -180,6 +212,7 @@ def get_all_subscribers_as_csv():
 def load_from_csv(csv_str: str) -> str:
     data = io.StringIO(csv_str)
     reader = csv.reader(data)
+    next(reader)
     for row in reader:
         if _my_database_filter(Subscriber.objects.all(), lambda x: x.imsi == row[2]):
             # subscriber already exists

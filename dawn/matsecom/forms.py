@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Service, Subscriber, Session, Invoice
+from .models import Subscriber, Session
 
 
 class SubscriberForm(forms.ModelForm):
@@ -19,3 +19,6 @@ class SessionForm(forms.ModelForm):
     class Meta:
         model = Session
         fields = ['subscriber', 'service', 'duration']
+
+class UploadCSVForm(forms.Form):
+    csv_file = forms.FileField()

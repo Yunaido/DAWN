@@ -48,5 +48,15 @@
     {% else %}
       <div class="alert alert-info" role="alert">No subscribers found.</div>
     {% endif %}
+
+    <div class="container">
+      <h2 class="my-3">Import/Export Subscribers</h2>
+      <form id="upload-form" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <input type="file" name="csv_file" id="csv_file" accept=".csv" />
+        <button type="submit" class="btn btn-primary">Import CSV</button>
+      </form>
+      <a href="/subscribers/?action=download" class="btn btn-primary">Export CSV</a>
+    </div>
   </div>
 {% endblock %}
