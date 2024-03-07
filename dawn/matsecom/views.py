@@ -32,11 +32,6 @@ class SubscriberDeleteView(DeleteView):
     model = Subscriber
     success_url = reverse_lazy('subscriber_list')
 
-# class AddSubscriberView(CreateView):
-#     model = Subscriber
-#     form_class = SubscriberForm
-#     template_name = 'subscribers/add_subscriber.html'
-#     success_url = reverse_lazy('subscriber_list')
 class AddSubscriberView(CreateView):
     model = Subscriber
     form_class = SubscriberForm
