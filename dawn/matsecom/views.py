@@ -214,7 +214,7 @@ def load_from_csv(csv_str: str) -> str:
     reader = csv.reader(data)
     next(reader)
     for row in reader:
-        if _my_database_filter(Subscriber.objects.all(), lambda x: x.imsi == row[2]):
+        if _my_database_filter(Subscriber.objects.all(), lambda x: x.imsi == int(row[2])):
             # subscriber already exists
             continue
         if not Terminal.objects.get(name=row[3]):
