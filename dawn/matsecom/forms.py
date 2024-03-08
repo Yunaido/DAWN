@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Subscriber, Session
+from .models import Invoice, Subscriber, Session
 
 
 class SubscriberForm(forms.ModelForm):
@@ -16,8 +16,10 @@ class SubscriberForm(forms.ModelForm):
             }),
         }
         
-class InvoiceForm(forms.Form):
-    subscriber_id = forms.ModelChoiceField(queryset=Subscriber.objects.all(), label="Select Subscriber")
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ['subscriber']
 
 class SessionForm(forms.ModelForm):
     class Meta:

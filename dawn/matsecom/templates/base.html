@@ -8,7 +8,6 @@
     <style>
       body {
         font-family: 'Quicksand', sans-serif;
-        background-color: rgba(221, 160, 221, 0.1); /* Very, very, very transparent mauve background */
         color: #495057; /* Dark gray text */
         display: flex;
         flex-direction: column;
@@ -17,8 +16,7 @@
       
       header,
       footer {
-        padding: 20px;
-        background-color: #9cdcd4; /* White background color for both header and footer */
+        padding: 0;
         color: #000; /* Black text color for both header and footer */
       }
       
@@ -28,13 +26,13 @@
         background-color: #fff; /* White content background */
         border-radius: 20px; /* Rounded corners for the content */
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-        margin: 20px;
+        margin: 0 20px 0 20px;
         flex: 1; /* Take remaining space */
       }
       
       .btn-primary {
-        background-color: rgba(147, 112, 219, 0.8); /* Light transparent purple button background */
-        border-color: rgba(147, 112, 219, 0.8); /* Light transparent purple button border color */
+        background-color: rgba(34, 111, 155, 0.8); /* Light transparent purple button background */
+        border-color: rgba(145, 193, 219, 0.8); /* Light transparent purple button border color */
       }
       
       .list-group {
@@ -58,10 +56,10 @@
       {% endblock %}
     </title>
   </head>
-  <body>
-    <header class="navbar navbar-expand-lg navbar-light bg-light">
+  <body class="bg-light">
+    <header class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="/"><img src="../../static/Matsecom.png" alt="MATSECOM Logo" height="50" /></a>
+        <a class="navbar-brand" href="/"><img src="../../static/Matsecom.png" alt="MATSECOM Logo" height="80" /></a>
         {% comment %} <h1 class="navbar-text text-center mb-0">Welcome to MATSECOM!</h1> {% endcomment %}
         <form class="form-inline my-2 my-lg-0 ml-auto" method="post" action="{% url 'logout' %}">
           {% csrf_token %}

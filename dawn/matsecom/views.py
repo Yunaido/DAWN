@@ -84,12 +84,13 @@ class SessionView(CreateView):
     template_name = 'session/simulate_session.html'
 
 class CreateInvoiceView(FormView):
-    template_name = 'invoices/create_invoice.html'
+    model = Invoice
     form_class = InvoiceForm
+    template_name = 'invoices/create_invoice.html'
     success_url = reverse_lazy('invoice_details')
 
     def form_valid(self, form):
-        subscriber = form.cleaned_data['subscriber_id']
+        subscriber = form.cleaned_data['subscriber']
         generated_invoice = invoice(subscriber) # Rufen Sie die invoice-Funktion auf
         # Speichern Sie die Ergebnisse in der Sitzung, um sie im nächsten Schritt zu verwenden
         return HttpResponseRedirect(reverse('invoice_details', args=[generated_invoice.id]))
