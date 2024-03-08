@@ -10,7 +10,8 @@
   <h1>Invoice Details</h1>
   <p>Subscriber: {{ invoice.subscriber.surname }} {{ invoice.subscriber.forename }}</p>
   <p>Timestamp: {{ invoice.timestamp }}</p>
-  <p>Data Volume: {{ invoice.data_volume }} MB</p>
-  <p>Call Minutes: {{ invoice.call_minutes }} min</p>
+  <p>Subscription Type: {{ invoice.subscriber.subscription_type.name }}</p>
+  <p>Data Volume: {{ invoice.data_volume }} MB / {{invoice.subscriber.subscription_type.data_volume_3g_4g }} MB</p>
+  <p>Call Minutes: {{ invoice.call_minutes }} min / {{invoice.subscriber.subscription_type.minutes_included }} min</p>
   <p>Charges: {{ invoice.charges|div:100|floatformat:2 }} €</p>
 {% endblock %}
