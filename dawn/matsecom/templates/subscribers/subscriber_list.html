@@ -53,10 +53,21 @@
       <h2 class="my-3">Import/Export Subscribers</h2>
       <form id="upload-form" enctype="multipart/form-data" method="post">
         {% csrf_token %}
-        <input type="file" name="csv_file" id="csv_file" accept=".csv" />
-        <button type="submit" class="btn btn-primary">Import CSV</button>
+        <input type="file" id="csv_file" name="csv_file" accept=".csv" style="display: none;" />
+        <label class="btn btn-outline-secondary" style="margin: 0" for="csv_file">Choose file</label>
+        <button type="submit" class="btn btn-primary" style="margin: 5px">Import CSV</button>
       </form>
       <a href="/subscribers/?action=download" class="btn btn-primary">Export CSV</a>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('csv_file').addEventListener('change', function () {
+        var fileName = this.files[0].name
+        var nextSibling = this.nextElementSibling
+        nextSibling.innerText = fileName
+      })
+    })
+  </script>
 {% endblock %}
