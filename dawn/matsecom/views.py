@@ -1,5 +1,6 @@
 import csv
 import io
+import math
 
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -244,7 +245,7 @@ def _sum_sessions(sessions: list, subscription: Subscription) -> (int, int, int)
     call_minutes = _get_call_minutes_from_seconds(call_seconds)
     if call_minutes > subscription.minutes_included:
         charges += (call_minutes - subscription.minutes_included) * subscription.price_per_extra_minute
-    return data_volume, call_seconds, charges
+    return data_volume, call_minutes, charges
 
 
 # returns a list of tuples (technology, throughput_percentage), choosing a random throughput percentage for each
@@ -262,7 +263,7 @@ def _get_random_throughput_percentage_for_terminal_technologies(terminal):
 # returns the number of call minutes for a given duration in seconds
 # rounds up to the next minute
 def _get_call_minutes_from_seconds(sec: int) -> int:
-    return (sec // 60) + 1
+    return math.ceil(sec / 60)
 
 
 # because of encryption, the .filter function used by django doesnt work properly, so we use this function instead
