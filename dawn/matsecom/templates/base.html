@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,7 +18,7 @@
       
       header,
       footer {
-        padding: 0;
+        padding: 10px;
         color: #000; /* Black text color for both header and footer */
       }
       
@@ -59,7 +61,7 @@
   <body class="bg-light">
     <header class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="/"><img src="../../static/Matsecom.png" alt="MATSECOM Logo" height="80" /></a>
+        <a class="navbar-brand" href="/"><img src="{% static 'Matsecom.png' %}" alt="MATSECOM Logo" height="80" /></a>
         {% comment %} <h1 class="navbar-text text-center mb-0">Welcome to MATSECOM!</h1> {% endcomment %}
         <form class="form-inline my-2 my-lg-0 ml-auto" method="post" action="{% url 'logout' %}">
           {% csrf_token %}
