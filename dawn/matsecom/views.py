@@ -153,7 +153,7 @@ def _simulate_session(subscriber: Subscriber, service: Service, duration: int, t
             return "calling not possible"
         call_seconds = duration
     else:
-        sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber)
+        sessions = _my_database_filter(Session.objects.all(), lambda x: x.subscriber == subscriber and not x.paid)
         (used_data_volume, used_call_seconds, charges) = _sum_sessions(sessions, subscriber.subscription_type)
 
         throughput_percentages = throughput_chooser(subscriber.terminal_type)
@@ -165,7 +165,7 @@ def _simulate_session(subscriber: Subscriber, service: Service, duration: int, t
         if service.required_data_rate > fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage:
             return "not enough bandwidth"
         data_volume = fastest_throughput[0].maximum_throughput * fastest_throughput[1].percentage * duration
-        if used_data_volume + data_volume > subscriber.subscription_type.data_volume_3g_4g:
+        if used_data_volume + data_volume > subscriber.subscription_type.data_volume_3g_4g * 8:
             return "not enough data volume"
 
     Session.objects.create(
@@ -192,7 +192,7 @@ def invoice(subscriber: Subscriber) -> Invoice:
     return Invoice.objects.create(
         subscriber=subscriber,
         timestamp=timezone.now,
-        data_volume=data_volume,
+        data_volume=_get_mb_from_mbit(data_volume),
         call_minutes=call_minutes,
         charges=charges
     )
@@ -265,6 +265,9 @@ def _get_random_throughput_percentage_for_terminal_technologies(terminal):
 def _get_call_minutes_from_seconds(sec: int) -> int:
     return math.ceil(sec / 60)
 
+
+def _get_mb_from_mbit(mbit: int) -> int:
+    return math.ceil(mbit / 8)
 
 # because of encryption, the .filter function used by django doesnt work properly, so we use this function instead
 # this is not very performant, but the easiest solution for now. A better solution would be to use something like
