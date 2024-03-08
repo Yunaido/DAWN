@@ -1,5 +1,6 @@
 import csv
 import io
+import math
 
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -262,7 +263,7 @@ def _get_random_throughput_percentage_for_terminal_technologies(terminal):
 # returns the number of call minutes for a given duration in seconds
 # rounds up to the next minute
 def _get_call_minutes_from_seconds(sec: int) -> int:
-    return (sec // 60) + 1
+    return math.ceil(sec / 60)
 
 
 # because of encryption, the .filter function used by django doesnt work properly, so we use this function instead
