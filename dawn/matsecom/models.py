@@ -63,7 +63,7 @@ class Subscription(models.Model):
 class Subscriber(models.Model):
     forename = EncryptedCharField(max_length=100, null=False)
     surname = EncryptedCharField(max_length=100, null=False)
-    imsi = EncryptedPositiveIntegerField(unique=True, null=False)
+    imsi =  models.PositiveIntegerField(unique=True, null=False)
     terminal_type = models.ForeignKey(Terminal, on_delete=models.PROTECT)
     subscription_type = models.ForeignKey(Subscription, on_delete=models.PROTECT)
     
